@@ -1,0 +1,22 @@
+{
+  "name": "dht-node",
+  "version": "0.0.1",
+  "description": "A node for DHT implementation",
+  "main": "index.js",
+  "author": "sebasvega95",
+  "license": "MIT",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "devDependencies": {
+    "prettier": "^1.2.2"
+  },
+  "dependencies": {
+    "chalk": "^1.1.3",
+    "crypto": "^0.0.3",
+    "ip": "^1.1.5",
+    "lowdb": "^0.16.2",
+    "minimist": "^1.2.0",
+    "zeromq": "^4.2.1"
+  }
+}
