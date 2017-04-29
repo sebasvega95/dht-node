@@ -20,17 +20,14 @@ log.info('My name:', nodeId);
 
 if (argv.n || argv.node) {
   const dirSomeNode = argv.n || argv.node;
-  log.info('Attempting to connect to ring through', dirSomeNode, '...');
+  log.info('Attempting to connect to ring through', dirSomeNode);
   if (!validate.dir(dirSomeNode)) {
     log.error('Invalid direction for node in ring');
     process.exit(1);
   }
 
-  let socket = zmq.socket('push');
-  socket.connect(`tcp://${dirSomeNode}`);
-
   log.info('Sending invite request');
-  messages.send(socket, { type: 'join', id: nodeId, dir: nodeDir });
+  messages.sendToDir(dirSomeNode, { type: 'join', id: nodeId, dir: nodeDir });
 } else {
   log.info('Building new ring');
   ring.join(
@@ -49,7 +46,6 @@ let clientSocket = zmq.socket('pull');
 clientSocket.bindSync(`tcp://*:${clientPort}`);
 log.info('Listening on port', clientPort);
 
-const range = require('./lib/range');
 clientSocket.on('message', msg => {
   msg = JSON.parse(msg);
   switch (msg.type) {
@@ -65,7 +61,16 @@ clientSocket.on('message', msg => {
     case 'new-pred':
       handle.newPredecessor(msg);
       break;
+    case 'insert':
+      handle.insert(msg);
+      break;
+    case 'look-up':
+      handle.lookUp(msg);
+      break;
+    case 'delete':
+      handle.delete(msg);
+      break;
     default:
-      messages.refuseUnknown(clientSocket);
+      log.warn(`Ignoring unknown message type '${msg.type}'`);
   }
 });
