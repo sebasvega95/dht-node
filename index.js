@@ -61,6 +61,9 @@ clientSocket.on('message', msg => {
     case 'new-pred':
       handle.newPredecessor(msg);
       break;
+    case 'new-entries':
+      handle.newEntries(msg);
+      break;
     case 'insert':
       handle.insert(msg);
       break;
@@ -73,4 +76,11 @@ clientSocket.on('message', msg => {
     default:
       log.warn(`Ignoring unknown message type '${msg.type}'`);
   }
+});
+
+process.on('SIGINT', function() {
+  console.log();
+  log.warn('Caught interrupt signal, exiting ring');
+  ring.removeNode();
+  process.exit();
 });
