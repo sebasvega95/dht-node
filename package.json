@@ -6,9 +6,11 @@
   "author": "sebasvega95",
   "license": "MIT",
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "build": "pkg index.js"
   },
   "devDependencies": {
+    "pkg": "^3.0.1",
     "prettier": "^1.2.2"
   },
   "dependencies": {
